@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections;
 
 namespace digitalmarketingjobs.ph.Data.Models
 {
@@ -12,7 +11,8 @@ namespace digitalmarketingjobs.ph.Data.Models
         public string Title { get; set; }
         public string Content { get; set; }
         public DateTime? PublishedDate { get; set; }
-        public BitArray IsFeatured { get; set; }
         public int? ViewsCount { get; set; }
+        public bool? IsFeatured { get; set; }
+        public DateTime? DateCreated { get; set; }
     }
 }

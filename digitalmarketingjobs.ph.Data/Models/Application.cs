@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections;
 
 namespace digitalmarketingjobs.ph.Data.Models
 {
@@ -16,6 +15,11 @@ namespace digitalmarketingjobs.ph.Data.Models
         public DateTime? DateUpdated { get; set; }
         public int? JobId { get; set; }
         public string CoverLetter { get; set; }
-        public BitArray IsRecommended { get; set; }
+        public bool? IsRecommended { get; set; }
+
+        public virtual Candidate Candidate { get; set; }
+        public virtual Client Client { get; set; }
+        public virtual Job Job { get; set; }
+        public virtual Resume Resume { get; set; }
     }
 }

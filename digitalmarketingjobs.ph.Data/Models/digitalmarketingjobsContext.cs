@@ -18,6 +18,7 @@ namespace digitalmarketingjobs.ph.Data.Models
         public virtual DbSet<Application> Applications { get; set; }
         public virtual DbSet<Blog> Blogs { get; set; }
         public virtual DbSet<Candidate> Candidates { get; set; }
+        public virtual DbSet<CandidateJobs> CandidateJobs { get; set; }
         public virtual DbSet<Client> Clients { get; set; }
         public virtual DbSet<Job> Jobs { get; set; }
         public virtual DbSet<JobAlert> JobAlerts { get; set; }
@@ -25,7 +26,6 @@ namespace digitalmarketingjobs.ph.Data.Models
         public virtual DbSet<JobRole> JobRoles { get; set; }
         public virtual DbSet<JobType> JobTypes { get; set; }
         public virtual DbSet<Resume> Resumes { get; set; }
-        public virtual DbSet<SpotlightJob> SpotlightJobs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -58,9 +58,7 @@ namespace digitalmarketingjobs.ph.Data.Models
                     .HasColumnName("date_updated")
                     .HasColumnType("date");
 
-                entity.Property(e => e.IsRecommended)
-                    .HasColumnName("is_recommended")
-                    .HasColumnType("bit(1)");
+                entity.Property(e => e.IsRecommended).HasColumnName("is_recommended");
 
                 entity.Property(e => e.JobId).HasColumnName("job_id");
 
@@ -69,6 +67,27 @@ namespace digitalmarketingjobs.ph.Data.Models
                 entity.Property(e => e.ResumeId).HasColumnName("resume_id");
 
                 entity.Property(e => e.StatusId).HasColumnName("status_id");
+
+                entity.HasOne(d => d.Candidate)
+                    .WithMany(p => p.Applications)
+                    .HasForeignKey(d => d.CandidateId)
+                    .HasConstraintName("application_candidate_fk");
+
+                entity.HasOne(d => d.Client)
+                    .WithMany(p => p.Application)
+                    .HasForeignKey(d => d.ClientId)
+                    .HasConstraintName("application_client_fk");
+
+                entity.HasOne(d => d.Job)
+                    .WithMany(p => p.Applications)
+                    .HasForeignKey(d => d.JobId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("application_job_fk");
+
+                entity.HasOne(d => d.Resume)
+                    .WithMany(p => p.Application)
+                    .HasForeignKey(d => d.ResumeId)
+                    .HasConstraintName("application_resume_fk");
             });
 
             modelBuilder.Entity<Blog>(entity =>
@@ -79,13 +98,15 @@ namespace digitalmarketingjobs.ph.Data.Models
 
                 entity.Property(e => e.Content).HasColumnName("content");
 
+                entity.Property(e => e.DateCreated)
+                    .HasColumnName("date_created")
+                    .HasColumnType("date");
+
                 entity.Property(e => e.ImageMain).HasColumnName("image_main");
 
                 entity.Property(e => e.ImageThumb).HasColumnName("image_thumb");
 
-                entity.Property(e => e.IsFeatured)
-                    .HasColumnName("is_featured")
-                    .HasColumnType("bit(1)");
+                entity.Property(e => e.IsFeatured).HasColumnName("is_featured");
 
                 entity.Property(e => e.PublishedDate)
                     .HasColumnName("published_date")
@@ -106,11 +127,66 @@ namespace digitalmarketingjobs.ph.Data.Models
                     .HasColumnName("date_registered")
                     .HasColumnType("date");
 
+                entity.Property(e => e.Educations)
+                    .HasColumnName("educations")
+                    .HasColumnType("jsonb");
+
                 entity.Property(e => e.Email).HasColumnName("email");
+
+                entity.Property(e => e.Experiences)
+                    .HasColumnName("experiences")
+                    .HasColumnType("jsonb");
+
+                entity.Property(e => e.GcashNo).HasColumnName("gcash_no");
 
                 entity.Property(e => e.Name).HasColumnName("name");
 
                 entity.Property(e => e.Password).HasColumnName("password");
+
+                entity.Property(e => e.Photo).HasColumnName("photo");
+
+                entity.Property(e => e.ProfessionalTitle)
+                    .HasColumnName("professional_title")
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.ResumeContent).HasColumnName("resume_content");
+
+                entity.Property(e => e.VideoUrl).HasColumnName("video_url");
+            });
+
+            modelBuilder.Entity<CandidateJobs>(entity =>
+            {
+                entity.ToTable("candidate_jobs");
+
+                entity.Property(e => e.CandidateJobsId).HasColumnName("candidate_jobs_id");
+
+                entity.Property(e => e.CandidateId).HasColumnName("candidate_id");
+
+                entity.Property(e => e.DateEnded)
+                    .HasColumnName("date_ended")
+                    .HasColumnType("date");
+
+                entity.Property(e => e.DateStarted)
+                    .HasColumnName("date_started")
+                    .HasColumnType("date");
+
+                entity.Property(e => e.IsActive).HasColumnName("is_active");
+
+                entity.Property(e => e.JobId).HasColumnName("job_id");
+
+                entity.Property(e => e.Salary)
+                    .HasColumnName("salary")
+                    .HasColumnType("numeric");
+
+                entity.HasOne(d => d.Candidate)
+                    .WithMany(p => p.CandidateJobs)
+                    .HasForeignKey(d => d.CandidateId)
+                    .HasConstraintName("candidate_jobs_fk");
+
+                entity.HasOne(d => d.Job)
+                    .WithMany(p => p.CandidateJobs)
+                    .HasForeignKey(d => d.JobId)
+                    .HasConstraintName("candidate_jobs_fk_1");
             });
 
             modelBuilder.Entity<Client>(entity =>
@@ -162,15 +238,11 @@ namespace digitalmarketingjobs.ph.Data.Models
                     .IsRequired()
                     .HasColumnName("description");
 
-                entity.Property(e => e.FilterCandidate)
-                    .HasColumnName("filter_candidate")
-                    .HasColumnType("bit(1)");
+                entity.Property(e => e.FilterCandidate).HasColumnName("filter_candidate");
 
                 entity.Property(e => e.IsFilled).HasColumnName("is_filled");
 
-                entity.Property(e => e.IsSpotlight)
-                    .HasColumnName("is_spotlight")
-                    .HasColumnType("bit(1)");
+                entity.Property(e => e.IsSpotlight).HasColumnName("is_spotlight");
 
                 entity.Property(e => e.JobRoleId).HasColumnName("job_role_id");
 
@@ -185,6 +257,23 @@ namespace digitalmarketingjobs.ph.Data.Models
                 entity.Property(e => e.Title)
                     .IsRequired()
                     .HasColumnName("title");
+
+                entity.HasOne(d => d.Client)
+                    .WithMany(p => p.Job)
+                    .HasForeignKey(d => d.ClientId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("job_client_fk");
+
+                entity.HasOne(d => d.JobRole)
+                    .WithMany(p => p.Job)
+                    .HasForeignKey(d => d.JobRoleId)
+                    .HasConstraintName("job_jobrole_fk");
+
+                entity.HasOne(d => d.JobType)
+                    .WithMany(p => p.Job)
+                    .HasForeignKey(d => d.JobTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("job_jobtype_fk");
             });
 
             modelBuilder.Entity<JobAlert>(entity =>
@@ -250,13 +339,6 @@ namespace digitalmarketingjobs.ph.Data.Models
                 entity.Property(e => e.SkillsTags).HasColumnName("skills_tags");
 
                 entity.Property(e => e.Title).HasColumnName("title");
-            });
-
-            modelBuilder.Entity<SpotlightJob>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToTable("spotlight_job");
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using digitalmarketingjobs.ph.Data.Models;
+using System.Threading.Tasks;
+
 namespace digitalmarketingjobs.ph.Data.Repository
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
@@ -20,31 +22,48 @@ namespace digitalmarketingjobs.ph.Data.Repository
             this._context = _context;
             table = _context.Set<T>();
         }
-        public IEnumerable<T> GetAll()
+        public async  Task<List<T>> GetAll()
         {
-            return table.ToList();
+            return await table.ToListAsync();
+           
         }
-        public T GetById(object id)
+
+        public async Task<List<T>> GetAll(string[] includes)
         {
-            return table.Find(id);
+            var query = table.AsQueryable();
+            foreach (var include in includes)
+                query = query.Include(include);
+            return await query.ToListAsync();
         }
-        public void Insert(T obj)
+
+      
+        public  async Task<T> GetById(object id)
         {
-            table.Add(obj);
+            return await table.FindAsync(id);
         }
-        public void Update(T obj)
+        public async Task Insert(T obj)
+        {
+           await table.AddAsync(obj);
+
+            await _context.SaveChangesAsync();
+        }
+        public async Task  Update(T obj)
         {
             table.Attach(obj);
             _context.Entry(obj).State = EntityState.Modified;
+
+            await _context.SaveChangesAsync();
         }
-        public void Delete(object id)
+        public async Task Delete(object id)
         {
-            T existing = table.Find(id);
+            T existing =await table.FindAsync(id);
             table.Remove(existing);
+
+
+            await _context.SaveChangesAsync();
+
+
         }
-        public void Save()
-        {
-            _context.SaveChanges();
-        }
+     
     }
 }

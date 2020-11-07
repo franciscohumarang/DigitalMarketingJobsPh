@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections;
 
 namespace digitalmarketingjobs.ph.Data.Models
 {
     public partial class Job
     {
-        public long JobId { get; set; }
+        public Job()
+        {
+            Applications = new HashSet<Application>();
+            CandidateJobs = new HashSet<CandidateJobs>();
+        }
+
+        public int JobId { get; set; }
         public int JobTypeId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
@@ -18,7 +23,13 @@ namespace digitalmarketingjobs.ph.Data.Models
         public int? SalaryTo { get; set; }
         public string Tags { get; set; }
         public int? JobRoleId { get; set; }
-        public BitArray IsSpotlight { get; set; }
-        public BitArray FilterCandidate { get; set; }
+        public bool? IsSpotlight { get; set; }
+        public bool? FilterCandidate { get; set; }
+
+        public virtual Client Client { get; set; }
+        public virtual JobRole JobRole { get; set; }
+        public virtual JobType JobType { get; set; }
+        public virtual ICollection<Application> Applications { get; set; }
+        public virtual ICollection<CandidateJobs> CandidateJobs { get; set; }
     }
 }
