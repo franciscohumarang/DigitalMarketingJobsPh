@@ -8,6 +8,10 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using digitalmarketingjobs.ph.Models;
+using digitalmarketingjobs.ph.Data.Services;
+using digitalmarketingjobs.ph.Data.Repository;
+
 
 namespace digitalmarketingjobs.ph
 {
@@ -23,6 +27,14 @@ namespace digitalmarketingjobs.ph
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddScoped<IJobService, JobService>();
+            services.AddScoped<IApplicationService, ApplicationService>();
+            services.AddScoped<IBlogService, BlogService>();
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<ICandidateService, CandidateService>();
+
+
             services.AddControllersWithViews();
         }
 
@@ -39,6 +51,7 @@ namespace digitalmarketingjobs.ph
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

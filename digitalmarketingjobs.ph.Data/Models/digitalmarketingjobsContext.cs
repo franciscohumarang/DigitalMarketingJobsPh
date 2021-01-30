@@ -32,7 +32,7 @@ namespace digitalmarketingjobs.ph.Data.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseNpgsql("Host=localhost;Database=digitalmarketingjobs;Username=postgres;Password=P@ssw0rd@123");
+                optionsBuilder.UseNpgsql("Host=localhost;Database=digitalmarketingjobs;Username=postgres;Password=P@55w0rd!");
             }
         }
 

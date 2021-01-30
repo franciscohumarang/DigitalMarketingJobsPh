@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using digitalmarketingjobs.ph.Models;
+using digitalmarketingjobs.ph.Data.Services;
+using digitalmarketingjobs.ph.Data.CustomModels;
 
 namespace digitalmarketingjobs.ph.Controllers
 {
@@ -13,14 +15,34 @@ namespace digitalmarketingjobs.ph.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private IJobService _jobService;
+
+
+        public HomeController(ILogger<HomeController> logger, IJobService jobService)
         {
             _logger = logger;
+            _jobService = jobService;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var jobFilter = new JobFilter();
+
+            jobFilter.sortBy = 0;
+            jobFilter.pageNumber = 1;
+            jobFilter.recordsPerPage = 5;
+            jobFilter.jobRoleId = 0;
+
+            var recentJobs = _jobService.GetJobs(jobFilter);
+
+            var spotlightJobs = _jobService.GetSpotlightJobs();
+
+            var model = new HomeViewModel();
+
+            model.RecentJobs = recentJobs.Result?.ToList() ;
+            model.spotlightJobs = spotlightJobs.Result?.ToList();
+
+            return View(model);
         }
 
         public IActionResult Privacy()
@@ -31,7 +53,9 @@ namespace digitalmarketingjobs.ph.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ??
+                HttpContext.TraceIdentifier });
         }
     }
 }

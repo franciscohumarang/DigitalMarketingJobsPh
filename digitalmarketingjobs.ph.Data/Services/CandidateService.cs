@@ -20,7 +20,7 @@ namespace digitalmarketingjobs.ph.Data.Services
         Task<Candidate> Authenticate(string email, string password);
     }
 
-   public class CandidateService
+   public class CandidateService:ICandidateService
     {
         private digitalmarketingjobsContext dbContext = new digitalmarketingjobsContext();
         private IGenericRepository<Candidate> _candidateService;

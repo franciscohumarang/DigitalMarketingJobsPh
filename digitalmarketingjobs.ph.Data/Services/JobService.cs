@@ -20,6 +20,7 @@ namespace digitalmarketingjobs.ph.Data.Services
         Task UpdateJob(Job job);
 
         Task<List<Job>> GetJobs(JobFilter f);
+        Task<List<Job>> GetSpotlightJobs();
 
 
     }
@@ -100,17 +101,21 @@ namespace digitalmarketingjobs.ph.Data.Services
         public async Task <List<Job>> GetJobs(JobFilter f)
             
         {
-         
+            var arr = new string[3];
+            arr[0] = "JobRole";
+            arr[1] = "JobType";
+            arr[2] = "Client";
+
 
             var jobs = new List<Job>();
 
             if (f.jobRoleId!=0)
             {
-                jobs = await Task.Run(() => _jobService.GetAll().Result.Skip((f.pageNumber - 1) * f.recordsPerPage)
-                               .Take(f.recordsPerPage).Where(o=>o.JobRoleId==f.jobRoleId).ToList());
+                jobs = await Task.Run(() => _jobService.GetAll(arr).Result.Skip((f.pageNumber - 1) * f.recordsPerPage)
+                               .Take(f.recordsPerPage).Where(o=>o.JobRoleId==f.jobRoleId).ToList();
             }else
             {
-                jobs = await Task.Run(() => _jobService.GetAll().Result.Skip((f.pageNumber - 1) * f.recordsPerPage)
+                jobs = await Task.Run(() => _jobService.GetAll(arr).Result.Skip((f.pageNumber - 1) * f.recordsPerPage)
                                .Take(f.recordsPerPage).ToList());
             }
 
