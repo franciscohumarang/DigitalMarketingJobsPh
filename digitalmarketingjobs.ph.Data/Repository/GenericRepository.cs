@@ -31,8 +31,11 @@ namespace digitalmarketingjobs.ph.Data.Repository
         public async Task<List<T>> GetAll(string[] includes)
         {
             var query = table.AsQueryable();
+
+
             foreach (var include in includes)
                 query = query.Include(include);
+
             return await query.ToListAsync();
         }
 

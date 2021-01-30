@@ -21,6 +21,7 @@ namespace digitalmarketingjobs.ph.Data.Services
 
         Task<List<Job>> GetJobs(JobFilter f);
         Task<List<Job>> GetSpotlightJobs();
+    
 
 
     }
@@ -29,9 +30,16 @@ namespace digitalmarketingjobs.ph.Data.Services
         private digitalmarketingjobsContext dbContext = new digitalmarketingjobsContext();
         private IGenericRepository<Job> _jobService;
 
+        private string[] arr = new string[3];
+       
+
         public  JobService(IGenericRepository<Job>  jobService)
         {
             _jobService = jobService;
+
+            arr[0] = "JobRole";
+            arr[1] = "JobType";
+            arr[2] = "Client";
         }
 
 
@@ -101,22 +109,21 @@ namespace digitalmarketingjobs.ph.Data.Services
         public async Task <List<Job>> GetJobs(JobFilter f)
             
         {
-            var arr = new string[3];
-            arr[0] = "JobRole";
-            arr[1] = "JobType";
-            arr[2] = "Client";
-
+       
 
             var jobs = new List<Job>();
 
             if (f.jobRoleId!=0)
             {
                 jobs = await Task.Run(() => _jobService.GetAll(arr).Result.Skip((f.pageNumber - 1) * f.recordsPerPage)
-                               .Take(f.recordsPerPage).Where(o=>o.JobRoleId==f.jobRoleId).ToList();
+                               .Take(f.recordsPerPage).Where(o=>o.JobRoleId==f.jobRoleId).ToList());
             }else
             {
-                jobs = await Task.Run(() => _jobService.GetAll(arr).Result.Skip((f.pageNumber - 1) * f.recordsPerPage)
-                               .Take(f.recordsPerPage).ToList());
+                jobs = await  _jobService.GetAll(arr);
+
+                if (jobs.Count>0)
+                    jobs.Skip((f.pageNumber - 1) * f.recordsPerPage)
+                               .Take(f.recordsPerPage).ToList();
             }
 
             if (f.jobTypeId != 0)
@@ -156,8 +163,14 @@ namespace digitalmarketingjobs.ph.Data.Services
 
         public async Task <List<Job>> GetSpotlightJobs()
         {
-            return await Task.Run(() => _jobService.GetAll().Result.Where (o=>o.IsSpotlight==true) 
-                                   .ToList());
+       
+
+           var jobs = await _jobService.GetAll(arr);
+
+            if (jobs.Count > 0)
+                jobs.Where(o => o.IsSpotlight == true).ToList();
+
+            return jobs;
         }
     }
 

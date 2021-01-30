@@ -24,7 +24,7 @@ namespace digitalmarketingjobs.ph.Controllers
             _jobService = jobService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var jobFilter = new JobFilter();
 
@@ -33,14 +33,14 @@ namespace digitalmarketingjobs.ph.Controllers
             jobFilter.recordsPerPage = 5;
             jobFilter.jobRoleId = 0;
 
-            var recentJobs = _jobService.GetJobs(jobFilter);
+            var recentJobs =await _jobService.GetJobs(jobFilter);
 
-            var spotlightJobs = _jobService.GetSpotlightJobs();
+            var spotlightJobs =await  _jobService.GetSpotlightJobs();
 
             var model = new HomeViewModel();
 
-            model.RecentJobs = recentJobs.Result?.ToList() ;
-            model.spotlightJobs = spotlightJobs.Result?.ToList();
+            model.RecentJobs = recentJobs?.ToList() ;
+            model.spotlightJobs = spotlightJobs?.ToList();
 
             return View(model);
         }

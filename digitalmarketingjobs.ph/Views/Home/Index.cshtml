@@ -41,34 +41,36 @@
             <h3 class="margin-bottom-25">Recent Jobs</h3>
             <div class="listings-container">
 
-               @{
-                   var recentJobs = Model.RecentJobs;
+                @{
+                    var recentJobs = Model.RecentJobs;
 
-                   foreach (var job in recentJobs )
-                   {
-                <!-- Listing -->
-                <a href="job-page-alt.html" class="listing full-time">
-                    <div class="listing-logo">
-                        <img  src="images/job-list-logo-01.png" alt="">
-                     
-                    </div>
-                    <div class="listing-title">
-                        <h4>@job.Title <span class="listing-type">@job.JobType.Type</span></h4>
-                        <ul class="listing-icons">
-                            <li><i class="ln ln-icon-Management"></i> King</li>
-                            <li><i class="ln ln-icon-Map2"></i> Sydney</li>
-                            <li><i class="ln ln-icon-Money-2"></i> $5000 - $7000</li>
-                            <li><div class="listing-date new">new</div></li>
-                        </ul>
-                    </div>
-                </a>
-                       }
-                   }
-            
-            <a href="browse-jobs.html" class="button centered"><i class="fa fa-plus-circle"></i> Show More Jobs</a>
-            <div class="margin-bottom-55"></div>
+                    foreach (var job in recentJobs)
+                    {
+                        <a href="/job/@job.JobId" class="listing full-time">
+                            <!-- Listing -->
+
+                            <div class="listing-logo">
+                                <img src="images/job-list-logo-01.png" alt="">
+
+                            </div>
+                            <div class="listing-title">
+                                <h4>@job.Title <span class="listing-type">@job.JobType.Type</span></h4>
+                                <ul class="listing-icons">
+                                    <li><i class="ln ln-icon-Management"></i> @job.Client.CompanyName</li>
+
+                                    <li><i class="ln ln-icon-Money-2"></i> $@job.SalaryFrom- $@job.SalaryTo</li>
+                                    <li><div class="listing-date new">new</div></li>
+                                </ul>
+                            </div>
+                        </a>
+                    }
+                }
+
+                <a href="browse-jobs.html" class="button centered"><i class="fa fa-plus-circle"></i> Show More Jobs</a>
+                <div class="margin-bottom-55"></div>
+            </div>
         </div>
-    </div>
+        </div>
 
     <!-- Job Spotlight -->
     <div class="five columns">

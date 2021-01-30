@@ -11,7 +11,7 @@ using Microsoft.Extensions.Hosting;
 using digitalmarketingjobs.ph.Models;
 using digitalmarketingjobs.ph.Data.Services;
 using digitalmarketingjobs.ph.Data.Repository;
-
+using digitalmarketingjobs.ph.Data.Models;
 
 namespace digitalmarketingjobs.ph
 {
@@ -34,7 +34,7 @@ namespace digitalmarketingjobs.ph
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<ICandidateService, CandidateService>();
 
-
+            services.AddDbContext<digitalmarketingjobsContext>(ServiceLifetime.Transient);
             services.AddControllersWithViews();
         }
 
