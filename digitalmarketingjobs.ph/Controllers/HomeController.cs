@@ -26,23 +26,29 @@ namespace digitalmarketingjobs.ph.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var jobFilter = new JobFilter();
-
-            jobFilter.sortBy = 0;
-            jobFilter.pageNumber = 1;
-            jobFilter.recordsPerPage = 5;
-            jobFilter.jobRoleId = 0;
-
-            var recentJobs =await _jobService.GetJobs(jobFilter);
-
-            var spotlightJobs =await  _jobService.GetSpotlightJobs();
-
             var model = new HomeViewModel();
+            
+                var jobFilter = new JobFilter();
 
-            model.RecentJobs = recentJobs?.ToList() ;
-            model.spotlightJobs = spotlightJobs?.ToList();
+                jobFilter.sortBy = 0;
+                jobFilter.pageNumber = 1;
+                jobFilter.recordsPerPage = 5;
+                jobFilter.jobRoleId = 0;
 
+                var recentJobs = await _jobService.GetJobs(jobFilter);
+
+                var spotlightJobs = await _jobService.GetSpotlightJobs();
+
+                
+
+                model.RecentJobs = recentJobs?.ToList();
+                model.spotlightJobs = spotlightJobs?.ToList();
+
+           
             return View(model);
+
+
+
         }
 
         public IActionResult Privacy()

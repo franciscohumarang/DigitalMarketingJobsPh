@@ -1,0 +1,158 @@
+﻿@using digitalmarketingjobs.ph.Helper
+@model  digitalmarketingjobs.ph.Models.JobsViewModel
+<!-- Titlebar
+================================================== -->
+<div id="titlebar">
+    <div class="container">
+        <div class="ten columns">
+            <span>We found @Model.Jobs.Count jobs matching:</span>
+            <h2>Web, Software & IT</h2>
+        </div>
+
+        <div class="six columns">
+            <a href="dashboard-add-job.html" class="button">Post a Job, It’s Free!</a>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- Content
+================================================== -->
+<div class="container">
+    <!-- Recent Jobs -->
+    <div class="eleven columns">
+        <div class="padding-right">
+
+            <div class="listings-container">
+
+
+
+                @foreach (var job in Model.Jobs)
+                {
+                    string imgSrc = "";
+
+                    if (job.Client.CompanyLogo != null) {
+                        var base64 = Convert.ToBase64String(job.Client.CompanyLogo);
+                        imgSrc = String.Format("data:image/png;base64,{0}", base64);
+                    }
+                    var datePosted = @GeneralHelper.GetDaysAgo(job.DatePosted);
+
+                    <!-- Listing -->
+                    <a href="job-page-alt.html" class="listing @job.JobType.Type.ToLower().Replace(' ','-')">
+                        <div class="listing-logo">
+                            <img src="@imgSrc" alt="">
+                        </div>
+                        <div class="listing-title">
+                            <h4>@job.Title  <span class="listing-type">@job.JobType.Type</span></h4>
+                            <ul class="listing-icons">
+                                <li><i class="ln ln-icon-Management"></i> @job.Client.CompanyName</li>
+
+                                <li><i class="ln ln-icon-Money-2"></i> $@job.SalaryFrom- $@job.SalaryTo</li>
+
+                                <li><div class="listing-date @(datePosted=="new"? "new":"")"> @datePosted</div></li>
+                            </ul>
+                        </div>
+                    </a>
+                    }
+            
+
+                </div>
+            <div class="clearfix"></div>
+
+            <div class="pagination-container">
+                <nav class="pagination">
+                    <ul>
+                        <li><a href="#" class="current-page">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li class="blank">...</li>
+                        <li><a href="#">22</a></li>
+                    </ul>
+                </nav>
+
+                <nav class="pagination-next-prev">
+                    <ul>
+                        <li><a href="#" class="prev">Previous</a></li>
+                        <li><a href="#" class="next">Next</a></li>
+                    </ul>
+                </nav>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Widgets -->
+    <div class="five columns">
+
+        <!-- Sort by -->
+        <div class="widget">
+            <h4>Sort by</h4>
+
+            <!-- Select -->
+            <select data-placeholder="Choose Category" class="chosen-select-no-single">
+                <option selected="selected" value="recent">Newest</option>
+                <option value="oldest">Oldest</option>
+                <option value="expiry">Expiring Soon</option>
+                <option value="ratehigh">Hourly Rate – Highest First</option>
+                <option value="ratelow">Hourly Rate – Lowest First</option>
+            </select>
+
+        </div>
+
+  
+
+        <!-- Job Type -->
+        <div class="widget">
+            <h4>Job Type</h4>
+
+            <ul class="checkboxes">
+                <li>
+                    <input id="check-type-0" type="checkbox" name="check" value="check-1" checked>
+                    <label for="check-type-0">Any Type</label>
+                </li>
+                @foreach (var jobType in Model.JobTypes)
+                {
+                    var noOfJobs = Model.Jobs.Where(w => w.JobType.Type == jobType.Type).Count();
+                    <li>
+                        <input id="check-type-@jobType.JobTypeId" type="checkbox" name="check" value="@jobType.JobTypeId">
+                        <label for="check-type-@jobType.JobTypeId">@jobType.Type<span>( @(noOfJobs > 0 ? noOfJobs : "0") )</span></label>
+                    </li>
+                }
+
+             
+            </ul>
+
+        </div>
+
+        <!-- Rate/Hr -->
+        <div class="widget">
+            <h4>Job Roles</h4>
+
+            <ul class="checkboxes">
+                <li>
+                    <input id="check-6" type="checkbox" name="check" value="check-6" checked>
+                    <label for="check-6">Any Role</label>
+                </li>
+                @foreach (var jobRole in Model.JobRoles)
+                {
+                    var noOfJobs = Model.Jobs.Where(w => w.JobRole.Role == jobRole.Role).Count();
+                    <li>
+                        <input id="check-role-@jobRole.JobRoleId" type="checkbox" name="check" value="@jobRole.JobRoleId">
+                        <label for="check-role-@jobRole.JobRoleId">@jobRole.Role<span>( @(noOfJobs > 0 ? noOfJobs : "0") )</span></label>
+                    </li>
+                }
+
+             
+            </ul>
+
+        </div>
+
+
+
+    </div>
+    <!-- Widgets / End -->
+
+
+</div>

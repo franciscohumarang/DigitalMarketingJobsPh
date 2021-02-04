@@ -15,6 +15,7 @@ namespace digitalmarketingjobs.ph.Data.Models
         public int JobTypeId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
+        public string ShortDescription { get; set; }
         public DateTime DatePosted { get; set; }
         public DateTime DateExpires { get; set; }
         public bool? IsFilled { get; set; }

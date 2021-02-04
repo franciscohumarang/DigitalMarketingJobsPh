@@ -1,0 +1,129 @@
+﻿@model digitalmarketingjobs.ph.Data.Models.Job
+
+
+ 
+
+<!-- Titlebar
+================================================== -->
+<div id="titlebar">
+    <div class="container">
+        <div class="ten columns">
+            <span><a href="browse-jobs.html">Restaurant / Food Service</a></span>
+            <h2>@Model.Title<span class="full-time">@Model.JobType.Type</span></h2>
+        </div>
+
+        <div class="six columns">
+            <a href="#" class="button dark"><i class="fa fa-star"></i> Bookmark This Job</a>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- Content
+================================================== -->
+<div class="container">
+
+    <!-- Recent Jobs -->
+    <div class="eleven columns">
+        <div class="padding-right">
+
+            <!-- Company Info -->
+            <div class="company-info">
+                <img src="images/company-logo.png" alt="">
+                <div class="content">
+                    <h4>@Model.Client.CompanyName</h4>
+                    <span><a href="@Model.Client.Website"><i class="fa fa-link"></i> Website</a></span>
+           
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            <p class="margin-reset">
+              @Model.ShortDescription
+            </p>
+
+            <br>
+
+
+            @Html.Raw(Model.Description)
+
+        </div>
+    </div>
+
+
+    <!-- Widgets -->
+    <div class="five columns">
+
+        <!-- Sort by -->
+        <div class="widget">
+            <h4>Overview</h4>
+
+            <div class="job-overview">
+
+                <ul>
+                     
+                    <li>
+                        <i class="fa fa-user"></i>
+                        <div>
+                            <strong>Job Title:</strong>
+                            <span>@Model.Title</span>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fa fa-clock-o"></i>
+                        <div>
+                            <strong>Job Type:</strong>
+                            <span>@Model.JobType.Type</span>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fa fa-money"></i>
+                        <div>
+                            <strong>Salart:</strong>
+                            <span>$@Model.SalaryFrom - $@Model.SalaryTo / month</span>
+                        </div>
+                    </li>
+                </ul>
+
+
+                <a href="#small-dialog" class="popup-with-zoom-anim button">Apply For This Job</a>
+
+                <div id="small-dialog" class="zoom-anim-dialog mfp-hide apply-popup">
+                    <div class="small-dialog-headline">
+                        <h2>Apply For This Job</h2>
+                    </div>
+
+                    <div class="small-dialog-content">
+                        <form action="#" method="get">
+                            <input type="text" placeholder="Full Name" value="" />
+                            <input type="text" placeholder="Email Address" value="" />
+                            <textarea placeholder="Your message / cover letter sent to the employer"></textarea>
+
+                            <!-- Upload CV -->
+                            <div class="upload-info"><strong>Upload your CV (optional)</strong> <span>Max. file size: 5MB</span></div>
+                            <div class="clearfix"></div>
+
+                            <label class="upload-btn">
+                                <input type="file" multiple />
+                                <i class="fa fa-upload"></i> Browse
+                            </label>
+                            <span class="fake-input">No file selected</span>
+
+                            <div class="divider"></div>
+
+                            <button class="send">Send Application</button>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- Widgets / End -->
+
+
+</div>

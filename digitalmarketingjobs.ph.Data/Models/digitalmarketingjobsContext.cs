@@ -238,6 +238,10 @@ namespace digitalmarketingjobs.ph.Data.Models
                     .IsRequired()
                     .HasColumnName("description");
 
+
+                entity.Property(e => e.ShortDescription)
+                     .HasColumnName("short_description");
+
                 entity.Property(e => e.FilterCandidate).HasColumnName("filter_candidate");
 
                 entity.Property(e => e.IsFilled).HasColumnName("is_filled");

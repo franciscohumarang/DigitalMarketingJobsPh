@@ -21,21 +21,28 @@ namespace digitalmarketingjobs.ph.Data.Services
 
         Task<List<Job>> GetJobs(JobFilter f);
         Task<List<Job>> GetSpotlightJobs();
-    
-
-
+        Task<Job> GetJobById(int jobId);
+        Task<List<JobType>> GetJobTypes();
+        Task<List<JobRole>> GetJobRoles();
     }
     public class JobService:IJobService
     {
         private digitalmarketingjobsContext dbContext = new digitalmarketingjobsContext();
+
         private IGenericRepository<Job> _jobService;
+
+        private IGenericRepository<JobType> _jobTypeService;
+
+        private IGenericRepository<JobRole> _jobRoleService;
 
         private string[] arr = new string[3];
        
 
-        public  JobService(IGenericRepository<Job>  jobService)
+        public  JobService(IGenericRepository<Job>  jobService, IGenericRepository<JobType> jobTypeService, IGenericRepository<JobRole> jobRoleService)
         {
-            _jobService = jobService;
+            _jobService     = jobService;
+            _jobRoleService = jobRoleService;
+            _jobTypeService = jobTypeService;
 
             arr[0] = "JobRole";
             arr[1] = "JobType";
@@ -49,6 +56,7 @@ namespace digitalmarketingjobs.ph.Data.Services
          
         }
 
+     
         public  async Task<List<Job>> GetJobsByClient(int clientId)
         {
           /*  return dbContext.Jobs
@@ -70,23 +78,15 @@ namespace digitalmarketingjobs.ph.Data.Services
 
         public async Task<Job> GetJobById(int jobId)
         {
-            /*
-            return dbContext.Jobs
-                .Include(j => j.JobRole)
 
-                .Include(jt => jt.JobType)
-                 .Where(w => w.JobId == jobId)
-                 .FirstOrDefault();*/
 
-             var arr = new string[2];
-              arr[0] = "JobRole";
-              arr[1] = "JobType";
- 
-            var job = await Task.Run(() => _jobService.GetAll(arr)
-                             .Result.Where(j => j.JobId == jobId)
-                                    .FirstOrDefault());
+            var job = await _jobService.GetAll(arr);
 
-            return job;
+                var _job = job.Where(j => j.JobId == jobId)
+                                         .FirstOrDefault(); 
+       
+
+            return _job;
         }
 
        
@@ -172,7 +172,18 @@ namespace digitalmarketingjobs.ph.Data.Services
 
             return jobs;
         }
+
+       public async  Task<List<JobType>> GetJobTypes()
+        {
+            var jobTypes = await _jobTypeService.GetAll();
+
+            return jobTypes;
+        }
+        public async Task<List<JobRole>> GetJobRoles()
+        {
+            var jobRoles = await _jobRoleService.GetAll();
+
+            return jobRoles;
+        }
     }
-
-
 }

@@ -1,5 +1,8 @@
 ﻿@model digitalmarketingjobs.ph.Models.HomeViewModel
 
+@using digitalmarketingjobs.ph.Helper;
+ 
+
 <!-- Slider
 ================================================== -->
 <div class="fullwidthbanner-container">
@@ -8,7 +11,7 @@
 
             <!-- Slide 1 -->
             <li data-fstransition="fade" data-transition="fade" data-slotamount="10" data-masterspeed="300">
-                <img src="images/banner-02.jpg" alt="">
+                <img src="/images/banner-02.jpg" alt="">
 
                 <div class="caption title sfb" data-x="center" data-y="195" data-speed="400" data-start="800" data-easing="easeOutExpo">
                     <h2>Hire great hourly employees</h2>
@@ -46,11 +49,11 @@
 
                     foreach (var job in recentJobs)
                     {
-                        <a href="@Url.Action("Job","Details",new { JobId = job.JobId })" class="listing full-time">
+                        <a href="/job/@job.JobId/@FriendlyUrlHelper.GetFriendlyTitle(job.Title)" class="listing full-time">
                             <!-- Listing -->
 
                             <div class="listing-logo">
-                                <img src="images/job-list-logo-01.png" alt="">
+                                <img src="/images/job-list-logo-01.png" alt="">
 
                             </div>
                             <div class="listing-title">
@@ -66,11 +69,11 @@
                     }
                 }
             </div>
-                <a href="browse-jobs.html" class="button centered"><i class="fa fa-plus-circle"></i> Show More Jobs</a>
-                <div class="margin-bottom-55"></div>
-           
+            <a href="@Url.RouteUrl("BrowseJobs")" class="button centered"><i class="fa fa-plus-circle"></i> Show More Jobs</a>
+            <div class="margin-bottom-55"></div>
+
         </div>
-        </div>
+    </div>
 
     <!-- Job Spotlight -->
     <div class="five columns">
@@ -91,18 +94,19 @@
                     <ul>
                         @foreach (var job in Model.spotlightJobs)
                         {
-                        <li>
-                            <div class="job-spotlight">
-                                <a href="#"><h4>@job.Title <span class="part-time">@job.JobType.Type</span></h4></a>
-                           
-                                <span><i class="fa fa-money"></i> $@job.SalaryFrom - $@job.SalaryTo</span>
-                                <p>@job.Description</p>
-                                <a href="@Url.Action("details","job",new { JobId = job.JobId })" class="button">Apply For This Job</a>
-                            </div>
-                        </li>
+                            <li>
+                                <div class="job-spotlight">
+                                    <a href="#"><h4>@job.Title <span class="part-time">@job.JobType.Type</span></h4></a>
+
+                                    <span><i class="fa fa-money"></i> $@job.SalaryFrom - $@job.SalaryTo</span>
+                                    <p>@job.Description</p>
+                                    <a href="/job/@job.JobId/@FriendlyUrlHelper.GetFriendlyTitle(job.Title)"  class="button">Apply For This Job</a>
+                                     
+                                </div>
+                            </li>
                         }
 
-                      
+
 
 
                     </ul>
